@@ -60,34 +60,32 @@ Start:
     ld [rLCDC], a
 
     ; Lock up. Stop cpu from running around
-.lockup
-    jr .lockup
+lockup:
+    jr lockup
 
 
 copyFont:
 ; @param: de -> source
 ; @param: bc -> byte count
 ; @param: hl -> destination
-.copyFont
     ld a, [de]           ; Grab 1 byte from the source
     ld [hli], a          ; Place it at the destination, incrementing hl
     inc de               ; Move to next byte
     dec bc               ; Decrement count
     ld a, b              ; Check if count is 0, since `dec bc` doesn't update flags
     or c
-    jr nz, .copyFont
+    jr nz, copyFont
     ret
 
 
 copyString:
 ; @param: de -> source
 ; @param: hl -> destination
-.copyString
     ld a, [de]
     ld [hli], a
     inc de
     and a              ; Check if the byte we just copied is zero
-    jr nz, .copyString ; Continue if it's not
+    jr nz, copyString ; Continue if it's not
     ret
 
 
