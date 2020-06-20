@@ -5,6 +5,8 @@ ASM = rgbasm
 LINKER = rgblink
 FIX = rgbfix
 
+EMULATOR = mednafen
+
 ASMFLAGS = -i inc/ -i data/
 
 UNAME_S := $(shell uname -s)
@@ -23,6 +25,10 @@ OBJS := $(foreach src,$(SOURCES), $(BUILDDIR)/$(src))
 
 
 all: build
+
+run: build
+	@echo $(ECHOFLAGS) "$(EMULATOR) $(TARGET)"
+	@-$(EMULATOR) $(TARGET) &>/dev/null
 
 build: $(TARGET)
 
