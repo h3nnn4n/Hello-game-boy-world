@@ -61,10 +61,53 @@ Start:
     ld bc, FontTilesEnd - FontTiles
     call copy
 
+    ;  Copy Sprites to VRAM
+    ld hl, $83F0
+    ld de, sprites
+    ld bc, 64          ; Each sprite is 16 bytes
+    call copy
+
     ; Copy text to vram
     ld hl, $9800
     ld de, HelloWorldStr
     call copyString
+
+    ; OAM stuff
+    ld  a, 80          ; OAM table mirror is located at $C000, let's set up 1st sprite
+    ld  [$C000], a     ; Y position
+    ld  a, 82
+    ld  [$C001], a     ; X position
+    ld  a, $3f
+    ld  [$C002], a     ; Tile/Pattern Number
+    ld  a, %00000000
+    ld  [$C003], a     ; Attributes/Flags
+
+    ld  a, 80
+    ld  [$C000 + 4], a
+    ld  a, 90
+    ld  [$C001 + 4], a
+    ld  a, $41
+    ld  [$C002 + 4], a
+    ld  a, %00000000
+    ld  [$C003 + 4], a
+
+    ld  a, 88
+    ld  [$C000 + 8], a
+    ld  a, 90
+    ld  [$C001 + 8], a
+    ld  a, $42
+    ld  [$C002 + 8], a
+    ld  a, %00000000
+    ld  [$C003 + 8], a
+
+    ld  a, 88
+    ld  [$C000 + 12], a
+    ld  a, 82
+    ld  [$C001 + 12], a
+    ld  a, $40
+    ld  [$C002 + 12], a
+    ld  a, %00000000
+    ld  [$C003 + 12], a
 
     ; Init palette
     ld  a, %11100100   ; 00 is white, 11 is black, the rest is gray
@@ -85,7 +128,7 @@ Start:
     ld  [rSCX], a
 
     ; Enable LCD
-    ld  a, LCDCF_ON | LCDCF_BGON
+    ld  a, LCDCF_ON | LCDCF_OBJON | LCDCF_BGON
     ;ld  a, %10000001
     ld  [rLCDC], a
 
@@ -236,3 +279,9 @@ SECTION "Hello World string", ROM0
 
 HelloWorldStr:
     db "Hello World", 0
+
+sprites:
+  db $00, $00, $00, $00, $07, $07, $0f, $0f, $1f, $1f, $1f, $1f, $19, $19, $11, $11
+  db $11, $11, $1f, $1f, $0e, $0e, $07, $07, $07, $07, $05, $05, $00, $00, $00, $00
+  db $00, $00, $00, $00, $f0, $f0, $f8, $f8, $fc, $fc, $fc, $fc, $cc, $cc, $c4, $c4
+  db $c4, $c4, $7c, $7c, $38, $38, $f0, $f0, $f0, $f0, $50, $50, $00, $00, $00, $00
