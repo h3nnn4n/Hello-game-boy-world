@@ -12,7 +12,7 @@ Using `make run` requires [mednafen](https://mednafen.github.io/) to be in the
 path
 
 # References
-
+- [Pan Docs](https://gbdev.io/pandocs/)
 - [Awesome Game Boy](https://github.com/gbdev/awesome-gbdev#software-development)
 - [Rednex Game Boy Development System](https://rednex.github.io/rgbds/)
 - [GB Programming](https://glitchcity.info/wiki/GB_Programming)
